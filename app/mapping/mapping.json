@@ -1,0 +1,66 @@
+{
+  "Document Information": {
+    "from_udd_sections": [],
+    "keys": []
+  },
+
+  "Introduction": {
+    "from_udd_sections": ["Purpose"],
+    "keys": ["Purpose"]
+  },
+
+  "Business Requirement Overview": {
+    "from_udd_sections": ["Purpose"],
+    "keys": ["Purpose"]
+  },
+
+  "Business Process Flow": {
+    "from_udd_sections": ["Scope"],
+    "keys": ["Scope"]
+  },
+
+  "Functional Scope": {
+    "from_udd_sections": ["Scope"],
+    "keys": ["Scope"]
+  },
+
+  "Functional Requirements": {
+    "from_udd_sections": ["Functional Requirements"],
+    "keys": ["Functional Requirements"]
+  },
+
+  "UI Requirement": {
+    "from_udd_sections": ["User Interface"],
+    "keys": ["User Interface"]
+  },
+
+  "Output": {
+    "from_udd_sections": ["Sample Report Output Layouts"],
+    "keys": ["Sample Report Output Layouts"]
+  },
+
+  "Interfaces & Integration": {
+    "from_udd_sections": ["Technical Architecture"],
+    "keys": ["Technical Architecture"]
+  },
+
+  "Authorization & Security": {
+    "from_udd_sections": ["Authorization"],
+    "keys": ["Authorization"]
+  },
+
+  "Error Handling & Notifications": {
+    "from_udd_sections": ["Error Handling"],
+    "keys": ["Error Handling"]
+  },
+
+  "Test Scenarios": {
+    "from_udd_sections": ["Unit Test Plan"],
+    "keys": ["Unit Test Plan"]
+  },
+
+  "Sign-Off": {
+    "from_udd_sections": [],
+    "keys": []
+  }
+}
