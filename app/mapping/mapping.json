@@ -20,6 +20,9 @@
   "Functional Requirements": {
     "from_udd_sections": ["3","5","7"]
   },
+  "Field Logic": {
+    "from_udd_sections": ["3","4","5"]
+  },
   "UI Requirement": {
     "from_udd_sections": ["4"]
   },
@@ -45,4 +48,3 @@
     "from_udd_sections": []
   }
 }
- 
