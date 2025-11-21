@@ -1,26 +1,26 @@
 import json
-import os
 import re
 from typing import Dict, Any
 
 class FDDParser:
 
-    SECTION_PATTERN = r"SECTION:\s*(\d+)\.\s*(.*)"
+    # Matches:
+    # SECTION: 1. PurposeThis is content ...
+    SECTION_SPLIT_REGEX = r"SECTION:\s*\d+\.\s*"
+
+    # Matches the title portion:
+    SECTION_HEADER_REGEX = r"SECTION:\s*(\d+)\.\s*([A-Za-z ]+)"
 
     def __init__(self, mapping_path: str):
         with open(mapping_path, "r", encoding="utf-8") as f:
             self.mapping = json.load(f)
 
-    # ------------------------------------------------------------------
-    # Main public function → converts payload["FDD"] to per-FSD payload
-    # ------------------------------------------------------------------
+    # Main method
     def extract_fsd_payloads(self, payload: dict) -> Dict[str, Dict[str, Any]]:
-
         udd_text = payload.get("FDD", "")
-        udd_sections = self._split_udd_into_sections(udd_text)
+        udd_sections = self._split_sections(udd_text)
 
-        final_output = {}
-
+        final_result = {}
         for fsd_section, config in self.mapping.items():
             source_sections = config.get("from_udd_sections", [])
 
@@ -28,46 +28,29 @@ class FDDParser:
 
             for s in source_sections:
                 if s in udd_sections:
-                    merged_text += udd_sections[s].strip() + "\n\n"
+                    merged_text += udd_sections[s] + "\n\n"
 
-            final_output[fsd_section] = {
+            final_result[fsd_section] = {
                 "content": merged_text.strip()
             }
 
-        return final_output
+        return final_result
 
-    # ------------------------------------------------------------------
-    # SPLITTING UDD BASED ON:
-    # SECTION: <number>. <title>
-    # ------------------------------------------------------------------
-    def _split_udd_into_sections(self, text: str) -> Dict[str, str]:
-
-        lines = text.splitlines()
-
+    # FIXED parser
+    def _split_sections(self, text: str) -> Dict[str, str]:
         sections = {}
-        current_title = None
-        buffer = []
+        
+        # Find all SECTION headers with title
+        headers = list(re.finditer(self.SECTION_HEADER_REGEX, text))
 
-        for line in lines:
-            # Detect section header
-            match = re.match(self.SECTION_PATTERN, line.strip())
-            if match:
-                # Save previous section
-                if current_title and buffer:
-                    sections[current_title] = "\n".join(buffer).strip()
+        for i, match in enumerate(headers):
+            sec_number = match.group(1)
+            sec_title = match.group(2).strip()
 
-                # Reset buffer for new section
-                section_number = match.group(1)
-                section_title = match.group(2).strip()
+            start = match.end()  # content starts after header
+            end = headers[i + 1].start() if i + 1 < len(headers) else len(text)
 
-                current_title = section_title
-                buffer = []
-            else:
-                if current_title:
-                    buffer.append(line)
-
-        # Add last section
-        if current_title and buffer:
-            sections[current_title] = "\n".join(buffer).strip()
+            content = text[start:end].strip()
+            sections[sec_title] = content
 
         return sections
