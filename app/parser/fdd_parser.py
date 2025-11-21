@@ -1,56 +1,75 @@
 import json
 import re
+import logging
 from typing import Dict, Any
+
+logger = logging.getLogger("fdd_parser")
+logging.basicConfig(level=logging.INFO)
 
 class FDDParser:
 
-    # Matches:
-    # SECTION: 1. PurposeThis is content ...
-    SECTION_SPLIT_REGEX = r"SECTION:\s*\d+\.\s*"
-
-    # Matches the title portion:
-    SECTION_HEADER_REGEX = r"SECTION:\s*(\d+)\.\s*([A-Za-z ]+)"
+    # Match: SECTION: 1.
+    SECTION_REGEX = r"SECTION:\s*(\d+)\."
 
     def __init__(self, mapping_path: str):
         with open(mapping_path, "r", encoding="utf-8") as f:
             self.mapping = json.load(f)
 
-    # Main method
     def extract_fsd_payloads(self, payload: dict) -> Dict[str, Dict[str, Any]]:
         udd_text = payload.get("FDD", "")
-        udd_sections = self._split_sections(udd_text)
+        udd_sections = self._split_numbers_only(udd_text)
 
-        final_result = {}
+        logger.info("📚 Total parsed UDD sections = %d", len(udd_sections))
+        logger.info("🔢 Sections found: %s", list(udd_sections.keys()))
+
+        final_output = {}
+
         for fsd_section, config in self.mapping.items():
-            source_sections = config.get("from_udd_sections", [])
+            src_nums = config.get("from_udd_sections", [])
+            logger.info(f"\n===== 📝 Mapping for FSD Section: {fsd_section} =====")
+            logger.info(f"➡️  Source section numbers: {src_nums}")
 
-            merged_text = ""
+            merged = ""
 
-            for s in source_sections:
-                if s in udd_sections:
-                    merged_text += udd_sections[s] + "\n\n"
+            for num in src_nums:
+                if num in udd_sections:
+                    logger.info(f"   ✓ Adding UDD Section {num} (len={len(udd_sections[num])})")
+                    merged += udd_sections[num] + "\n\n"
+                else:
+                    logger.info(f"   ⚠️ Section {num} not found in UDD")
 
-            final_result[fsd_section] = {
-                "content": merged_text.strip()
-            }
+            logger.info(f"   📦 Final merged content length = {len(merged.strip())}")
 
-        return final_result
+            final_output[fsd_section] = {"content": merged.strip()}
 
-    # FIXED parser
-    def _split_sections(self, text: str) -> Dict[str, str]:
+        return final_output
+
+
+    def _split_numbers_only(self, text: str) -> Dict[str, str]:
+        """
+        Split purely on SECTION: <num>. and ignore title text.
+        This handles cases where title merges with content.
+        Example:
+        SECTION: 1. PurposeThis doc...
+        SECTION: 2. ScopeText...
+        """
         sections = {}
-        
-        # Find all SECTION headers with title
-        headers = list(re.finditer(self.SECTION_HEADER_REGEX, text))
 
-        for i, match in enumerate(headers):
-            sec_number = match.group(1)
-            sec_title = match.group(2).strip()
+        matches = list(re.finditer(self.SECTION_REGEX, text))
 
-            start = match.end()  # content starts after header
-            end = headers[i + 1].start() if i + 1 < len(headers) else len(text)
+        logger.info(f"Found {len(matches)} SECTION headers")
+
+        for i, match in enumerate(matches):
+            sec_num = match.group(1).strip()
+            start = match.end()
+            end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
 
             content = text[start:end].strip()
-            sections[sec_title] = content
+
+            logger.info(f"   ➕ Parsed SECTION {sec_num}: (content_len={len(content)})")
+
+            sections[sec_num] = content
+
+        logger.info("📚 Finished parsing UDD into numbered sections.\n")
 
         return sections

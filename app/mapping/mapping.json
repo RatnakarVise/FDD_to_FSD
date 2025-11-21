@@ -1,36 +1,36 @@
 {
   "Introduction": {
-    "from_udd_sections": ["Purpose"]
+    "from_udd_sections": ["1"]
   },
   "Business Requirement Overview": {
-    "from_udd_sections": ["Purpose"]
+    "from_udd_sections": ["1"]
   },
   "Business Process Flow": {
-    "from_udd_sections": ["Scope"]
+    "from_udd_sections": ["2"]
   },
   "Functional Scope": {
-    "from_udd_sections": ["Scope"]
+    "from_udd_sections": ["2"]
   },
   "Functional Requirements": {
-    "from_udd_sections": ["Functional Requirements"]
+    "from_udd_sections": ["3"]
   },
   "UI Requirement": {
-    "from_udd_sections": ["User Interface"]
+    "from_udd_sections": ["4"]
   },
   "Interfaces & Integration": {
-    "from_udd_sections": ["Technical Architecture"]
+    "from_udd_sections": ["5"]
   },
   "Output": {
-    "from_udd_sections": ["Sample Report Output Layouts"]
+    "from_udd_sections": ["9"]
   },
   "Authorization & Security": {
-    "from_udd_sections": ["Authorization"]
+    "from_udd_sections": ["8"]
   },
   "Error Handling & Notifications": {
-    "from_udd_sections": ["Error Handling"]
+    "from_udd_sections": ["6"]
   },
   "Test Scenarios": {
-    "from_udd_sections": ["Unit Test Plan"]
+    "from_udd_sections": ["10"]
   },
   "Sign-Off": {
     "from_udd_sections": []
