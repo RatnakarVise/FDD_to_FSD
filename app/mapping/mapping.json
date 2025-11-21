@@ -1,18 +1,24 @@
 {
+  "Document Information": {
+    "from_udd_sections": ["1","2"]
+  },
   "Introduction": {
-    "from_udd_sections": ["1"]
+    "from_udd_sections": ["1","2"]
   },
   "Business Requirement Overview": {
-    "from_udd_sections": ["1"]
+    "from_udd_sections": ["1","2","3"]
   },
   "Business Process Flow": {
-    "from_udd_sections": ["2"]
+    "from_udd_sections": ["1","2","3"]
   },
   "Functional Scope": {
-    "from_udd_sections": ["2"]
+    "from_udd_sections": ["2","3"]
+  },
+  "Functional Solution Approach": {
+    "from_udd_sections": ["1","2","3","7"]
   },
   "Functional Requirements": {
-    "from_udd_sections": ["3"]
+    "from_udd_sections": ["3","5","7"]
   },
   "UI Requirement": {
     "from_udd_sections": ["4"]
@@ -21,7 +27,7 @@
     "from_udd_sections": ["5"]
   },
   "Output": {
-    "from_udd_sections": ["9"]
+    "from_udd_sections": ["5","9"]
   },
   "Authorization & Security": {
     "from_udd_sections": ["8"]
@@ -30,9 +36,13 @@
     "from_udd_sections": ["6"]
   },
   "Test Scenarios": {
-    "from_udd_sections": ["10"]
+    "from_udd_sections": ["5","10"]
+  },
+  "Assumptions & Dependencies": {
+    "from_udd_sections": ["2","3","7","8"]
   },
   "Sign-Off": {
     "from_udd_sections": []
   }
 }
+ 
